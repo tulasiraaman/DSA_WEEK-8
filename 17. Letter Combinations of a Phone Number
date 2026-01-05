@@ -1,0 +1,38 @@
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        // Initialise the list
+        List<String> result = new ArrayList<>();
+
+        // Edge case: digits is empty return
+        if (digits.isEmpty())
+            return result;
+
+        // store keypad values
+        String[] hash = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+
+        // call recursive function
+        generate(result, digits, hash, new StringBuilder(), 0);
+        return result;
+    }
+
+    private void generate(List<String> result, String str, String[] hash, StringBuilder sb, int idx) {
+        // base condition to break: if digitLength == generated valueLength eg., "23"=="ab"
+        if (str.length() == sb.length()) {
+            result.add(sb.toString());
+            return;
+        }
+
+        // get the value current index from digits string "23" -> 2 for map the hash
+        String letter = hash[str.charAt(idx) - '0'];
+
+        // after getting letter make this into character array
+        for (char word : letter.toCharArray()) {
+            sb.append(word);    // append the value 
+            generate(result, str, hash, sb, idx + 1); // call the recursive function
+            sb.deleteCharAt(sb.length() - 1); // backtrack the value
+        }
+    }
+}
+
+// TC = O(4^n . n)
+// SC = O(n) auxiliary + O(4^n . n) output storage
