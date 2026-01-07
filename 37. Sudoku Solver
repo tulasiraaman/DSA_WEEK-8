@@ -1,0 +1,39 @@
+class Solution {
+    public void solveSudoku(char[][] board) {
+        sudokuSolver(board);
+    }
+
+    private boolean sudokuSolver(char[][] board) {
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == '.') {
+                    for(char c = '1'; c <= '9';c++){
+                        if(isValid(board, row, col, c)){
+                            board[row][col] = c;
+                            if(sudokuSolver(board)) return true;
+                            board[row][col] = '.'; // backtrack
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true; // Edege case and if all ceils fails
+    }
+
+    private boolean isValid(char[][] board, int row, int col, char c) {
+        for (int i = 0; i < 9; i++) {
+            // check row and column
+            if (board[row][i] == c) return false;
+            if (board[i][col] == c) return false;
+        }
+
+        for (int i = 0; i < 9; i++) {
+            // check 3x3 subgrid
+            int subRow = 3 * (row / 3) + i / 3;
+            int subCol = 3 * (col / 3) + i % 3;
+            if (board[subRow][subCol] == c) return false;
+        }
+        return true;
+    }
+}
