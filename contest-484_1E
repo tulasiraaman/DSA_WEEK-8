@@ -1,0 +1,13 @@
+class Solution {
+    public int residuePrefixes(String s) {
+        int result = 0;
+        Set<Character> chars = new HashSet<>();
+        
+        for(int i = 0;i < s.length();i++){
+            chars.add(s.charAt(i));
+            int prefix = chars.size();
+            if(prefix == (i+1) % 3) result++;
+        }
+        return result;
+    }
+}
