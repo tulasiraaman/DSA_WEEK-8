@@ -34,5 +34,5 @@ class Solution {
     }
 }
 
-// TC = O(4^n . n)
+// TC = O(4^n . n) Max combinations: 4^N (if all digits are 7 or 9)
 // SC = O(n) auxiliary + O(4^n . n) output storage
