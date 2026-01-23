@@ -1,0 +1,38 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        if(s.length() == 0 || t.length() == 0) return "";
+
+        int[] tfreq = new int[128];
+        int[] sfreq = new int[128];
+
+        for(char ch: t.toCharArray()) tfreq[ch]++;
+
+        int start = 0, minLen = Integer.MAX_VALUE, minStart = 0;
+
+        for (int end = 0; end < s.length(); end++) {
+            sfreq[s.charAt(end)]++;
+
+            while (containAll(sfreq, tfreq)) {
+                int currWindowSize = end - start + 1;
+                if (currWindowSize < minLen) {
+                    minLen = currWindowSize;
+                    minStart = start;
+                }
+
+                // shrink window
+                sfreq[s.charAt(start)]--;
+                start++;
+            }
+        }
+
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);
+    }
+
+    private boolean containAll(int[] sfreq, int[] tfreq) {
+        for (int i = 0; i < tfreq.length; i++) {
+            if (sfreq[i] < tfreq[i]) return false;
+        }
+        return true;
+    }
+}
+// TC - O(n + m), SC - O(256) m = 128
