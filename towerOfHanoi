@@ -1,0 +1,22 @@
+class Solution {
+    public int towerOfHanoi(int n, int from, int to, int aux) {
+        // code here
+        // Base case: only one disk
+        if (n == 1) {
+            System.out.println("Move disk 1 from rod " + from + " to rod " + to);
+            return 1;
+        }
+
+        // Step 1: move n-1 disks from 'from' to 'aux'
+        int moves1 = towerOfHanoi(n - 1, from, aux, to);
+
+        // Step 2: move the nth disk from 'from' to 'to'
+        System.out.println("Move disk " + n + " from rod " + from + " to rod " + to);
+
+        // Step 3: move n-1 disks from 'aux' to 'to'
+        int moves2 = towerOfHanoi(n - 1, aux, to, from);
+
+        // Total moves
+        return moves1 + 1 + moves2;
+    }
+}
