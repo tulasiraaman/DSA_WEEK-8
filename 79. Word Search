@@ -1,0 +1,48 @@
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        int n = board.length, m = board[0].length;
+
+        for(int i = 0; i < n; i++)
+            for(int j = 0; j < m; j++)
+                if(board[i][j] == word.charAt(0) && dfs(board, i, j, 0, word))
+                    return true;
+
+        return false;
+    }
+
+    private boolean dfs(char[][] board, int row, int col, int start, String word){
+        // BASE CASE: If 'start' index matches word length, we've successfully matched all letters
+        if(start == word.length()) return true;
+
+        // FAILURE CASES:
+        // 1. Boundary check: ensure (row, col) is inside the grid
+        // 2. Visited check: ensure cell isn't marked with '@' (prevents infinite cycles)
+        // 3. Match check: ensure cell character matches the expected character in word
+        if(row < 0 || col < 0 || row >= board.length || col >= board[0].length || 
+           board[row][col] == '@' || board[row][col] != word.charAt(start)) {
+            return false;
+        }
+
+        // STEP 1: MARK AS VISITED
+        // Save original character to restore later (Backtracking)
+        char temp = board[row][col];
+        board[row][col] = '@'; // Temporarily change to non-alphabet char to mark as "visited"
+
+        // STEP 2: EXPLORE (Recursive calls in 4 directions)
+        // Check Down, Right, Up, and Left neighbors for the next character (start + 1)
+        if(
+            dfs(board, row + 1, col, start + 1, word) || // Move Down
+            dfs(board, row, col + 1, start + 1, word) || // Move Right
+            dfs(board, row - 1, col, start + 1, word) || // Move Up
+            dfs(board, row, col - 1, start + 1, word)    // Move Left
+        ){
+            return true; // If any path succeeds, propagate 'true' up the stack
+        }
+
+        // STEP 3: BACKTRACK
+        board[row][col] = temp;
+        return false;
+    }
+}
+// TC - O(N . M . 4 ^ L), SC - (L)
+// Direction = 4, L = Length of word
