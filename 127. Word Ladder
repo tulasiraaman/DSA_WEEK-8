@@ -1,0 +1,56 @@
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        // Put all words into a HashSet for O(1) lookup
+        Set<String> wordSet = new HashSet<>(wordList);
+        
+        // If endWord is not in the dictionary, no transformation is possible
+        if (!wordSet.contains(endWord)) return 0;
+
+        // BFS queue to explore words level by level
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        
+        // Depth represents the number of transformation steps
+        int depth = 1;
+
+        // Standard BFS loop
+        while (!queue.isEmpty()) {
+            int size = queue.size(); // Number of words at current level
+            
+            // Process all words at this level
+            for (int i = 0; i < size; i++) {
+                String cur = queue.poll();
+                
+                // If we reach the target word, return the depth
+                if (cur.equals(endWord)) return depth;
+
+                // Try changing each character of the current word
+                char[] charArr = cur.toCharArray();
+                for (int j = 0; j < charArr.length; j++) {
+                    char original = charArr[j]; // Save original character
+                    
+                    // Replace with every possible lowercase letter
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        if (c == original) continue; // Skip same character
+                        
+                        charArr[j] = c;
+                        String nextWord = new String(charArr);
+                        
+                        // If the new word is valid and unvisited
+                        if (wordSet.contains(nextWord)) {
+                            queue.offer(nextWord);   // Add to BFS queue
+                            wordSet.remove(nextWord); // Mark as visited
+                        }
+                    }
+                    
+                    // Restore original character before next iteration
+                    charArr[j] = original;
+                }
+            }
+            // Increase depth after finishing one level
+            depth++;
+        }
+        // If BFS ends without finding endWord, return 0
+        return 0;
+    }
+} // TC - O(N . M^2)
